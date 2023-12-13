@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from django_component_kit.attributes import AttributeBag
 from django_component_kit.nodes import SlotNodeList, SlotNode, ComponentNode, INNER_SLOT_NAME
-from django_component_kit import component_block_tag
+from django_component_kit.decorators import component_block_tag
 
 register = Library()
 
