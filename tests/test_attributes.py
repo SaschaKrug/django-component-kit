@@ -52,7 +52,7 @@ class AttributesToStringTest(TestCase):
     def test_result_is_safe_string(self):
         """The result of attributes_to_string is a SafeString."""
         result = attributes_to_string({"foo": mark_safe("'bar'")})
-        self.assertTrue( isinstance(result, SafeString))
+        self.assertTrue(isinstance(result, SafeString))
 
     def test_attribute_with_no_value(self):
         """Handles attribute with no value."""

@@ -35,12 +35,15 @@ tox = "^4.11.3"
 pre-commit = "^3.6.0"
 coverage = "^7.3.2"
 
+[tool.poe.tasks]
+test = "tox"
+lint = "pre-commit run --all-files"
+
 [tool.ruff]
 line-length = 120
 
 [tool.black]
 line-length = 120
-
 
 [build-system]
 requires = ["poetry-core"]

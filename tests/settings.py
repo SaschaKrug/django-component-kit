@@ -11,7 +11,7 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [BASE_DIR / "templates"],
         "OPTIONS": {
-            "builtins": ["django_component_kit.templatetags.components", 'tests.test_templatetags'],
+            "builtins": ["django_component_kit.templatetags.components", "tests.test_templatetags"],
         },
     },
 ]

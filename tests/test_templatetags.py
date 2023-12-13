@@ -17,6 +17,7 @@ class DoComponentTest(TestCase):
 
     def test_parses_component(self):
         """Parses a component tag and checks the resulting node."""
+
         @register.tag("hello")
         @component_block_tag(Template("""<p>hello</p>"""))
         def dummy():
@@ -32,6 +33,7 @@ class DoComponentTest(TestCase):
 
     def test_interprets_attributes_with_no_value_as_true(self):
         """Interprets attributes with no value as True."""
+
         @register.tag("hello")
         @component_block_tag(Template("""<p>hello</p>"""))
         def dummy():
@@ -50,6 +52,7 @@ class DoComponentTest(TestCase):
 
     def test_adds_non_slot_child_nodes_to_default_slot(self):
         """Adds non-slot child nodes to the default slot."""
+
         @register.tag("hello")
         @component_block_tag(Template("""<p>hello</p>"""))
         def dummy():
@@ -67,6 +70,7 @@ class DoComponentTest(TestCase):
 
     def test_passes_special_attributes_to_default_slot(self):
         """Passes special attributes to the default slot."""
+
         @register.tag("hello")
         @component_block_tag(Template("""<p>hello</p>"""))
         def dummy():
@@ -92,6 +96,7 @@ class DoComponentTest(TestCase):
 
     def test_parses_slots(self):
         """Parses slots within a component tag."""
+
         @register.tag("hello")
         @component_block_tag(Template("""<p>hello</p>"""))
         def dummy():
