@@ -34,6 +34,7 @@ ruff = "^0.1.0"
 tox = "^4.11.3"
 pre-commit = "^3.6.0"
 coverage = "^7.3.2"
+poethepoet = "^0.24.4"
 
 [tool.poe.tasks]
 test = "tox"
