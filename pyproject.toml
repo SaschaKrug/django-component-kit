@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "django-component-kit"
+version = "0.1.0"
+description = "A lightweight library for flexible Django component building, following Django's principles."
+authors = ["Sascha Krug"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/SaschaKrug/django-component-kit"
+repository = "https://github.com/SaschaKrug/django-component-kit"
+keywords = ["django", "component", "tag", "decorator"]
+classifiers = [
+    "Development Status :: 3 - Beta",
+    "Environment :: Web Environment",
+    "Operating System :: OS Independent",
+    "Framework :: Django",
+    "Framework :: Django :: 4.0",
+    "Framework :: Django :: 4.1",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+]
+packages = [{ include = "django_component_kit" }]
+include = [
+    "LICENSE",
+    "CHANGELOG.md",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+Django = ">=3.2"
+
+[tool.poetry.dev-dependencies]
+black = "^23.10.0"
+ruff = "^0.1.0"
+tox = "^4.11.3"
+pre-commit = "^3.6.0"
+coverage = "^7.3.2"
+
+[tool.ruff]
+line-length = 120
+
+[tool.black]
+line-length = 120
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
