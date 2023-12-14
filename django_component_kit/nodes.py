@@ -10,7 +10,7 @@ from django.utils.safestring import SafeString
 
 from django_component_kit.attributes import AttributeBag, attributes_to_string, merge_attributes, append_attributes
 
-INNER_SLOT_NAME = "inner_slot"
+INNER_SLOT_NAME = "children"
 
 
 class ComponentNode(Node):
