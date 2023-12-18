@@ -4,7 +4,7 @@ Django Component Kit template nodes.
 import inspect
 from typing import Any
 
-from django.template import TemplateSyntaxError, Context
+from django.template import TemplateSyntaxError, Context, RequestContext
 from django.template.base import FilterExpression, Node, NodeList, Template
 from django.utils.safestring import SafeString
 
@@ -55,7 +55,7 @@ class ComponentNode(Node):
                     slots[slot_name].append(slot)
         return slots
 
-    def render(self, context: Context) -> str:
+    def render(self, context: RequestContext) -> str:
         """Renders the component node."""
 
         slots = self._resolve_slots(context)
@@ -65,14 +65,16 @@ class ComponentNode(Node):
         with context.push(extra_context):
             kwargs = {}
             for key, parameter in inspect.signature(self.func).parameters.items():
-                if key != "context":
-                    try:
-                        if parameter.default == parameter.empty:
-                            kwargs[key] = context["attributes"].pop(key)
-                        else:
-                            kwargs[key] = context["attributes"].pop(key, parameter.default)
-                    except KeyError:
-                        raise TemplateSyntaxError(f"{self.name} component is missing required argument: {key}")
+                if key == "context":
+                    continue
+                try:
+                    if parameter.default == parameter.empty:
+                        kwargs[key] = context["attributes"].pop(key)
+                    else:
+                        kwargs[key] = context["attributes"].pop(key, parameter.default)
+                except KeyError:
+                    raise TemplateSyntaxError(f"{self.name} component is missing required argument: {key}")
+
             with context.update(self.func(**kwargs)):
                 return self.template.render(context.flatten())
 
