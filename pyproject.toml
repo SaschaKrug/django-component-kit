@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-component-kit"
-version = "0.1.0"
+version = "0.1.1"
 description = "A lightweight library for flexible Django component building, following Django's principles."
 authors = ["Sascha Krug"]
 license = "MIT"
