@@ -109,7 +109,7 @@ def do_partial(parser: Parser, token: Token) -> PartialNode:
     try:
         inline = tokens[2].strip('"')
         if inline != "inline":
-            raise TemplateSyntaxError(f"Invalid argument {inline}. argument must be 'inline'")
+            raise TemplateSyntaxError(f"Invalid argument {inline}. Possible options: [inline]")
     except IndexError:
         inline = False
 
