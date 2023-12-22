@@ -49,7 +49,7 @@ def _parse_bits(bits: list, parser: Parser, nodelist: NodeList) -> tuple:
     return slots, attrs
 
 
-def component_inline_tag(template: Template) -> callable:
+def component_inline_tag(template: Template, partial: str = None) -> callable:
     """Decorator for creating an inline component tag."""
 
     def dec(func):
@@ -58,7 +58,7 @@ def component_inline_tag(template: Template) -> callable:
             component_name = func.__name__
             _, *remaining_bits = token.split_contents()
             slots, attrs = _parse_bits(remaining_bits, parser, NodeList())
-            return ComponentNode(component_name, attrs, slots, func, template)
+            return ComponentNode(component_name, attrs, slots, func, template, partial)
 
         do_component.__name__ = func.__name__
         return do_component
@@ -66,7 +66,7 @@ def component_inline_tag(template: Template) -> callable:
     return dec
 
 
-def component_block_tag(template: Template) -> callable:
+def component_block_tag(template: Template, partial: str = None) -> callable:
     """Decorator for creating a block component tag."""
 
     def dec(func):
@@ -86,7 +86,7 @@ def component_block_tag(template: Template) -> callable:
             nodelist = parser.parse((f"end{component_name}",))
             parser.delete_first_token()
             slots, attrs = _parse_bits(remaining_bits, parser, nodelist)
-            return ComponentNode(component_name, attrs, slots, func, template)
+            return ComponentNode(component_name, attrs, slots, func, template, partial)
 
         do_component.__name__ = func.__name__
         return do_component

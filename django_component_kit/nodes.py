@@ -1,30 +1,31 @@
 """
 Django Component Kit template nodes.
 """
+import dataclasses
 import inspect
 from typing import Any
 
 from django.template import TemplateSyntaxError, Context, RequestContext
-from django.template.base import FilterExpression, Node, NodeList, Template
+from django.template.backends.django import Template
+from django.template.base import FilterExpression, Node, NodeList
 from django.utils.safestring import SafeString
 
 from django_component_kit.attributes import AttributeBag, attributes_to_string, merge_attributes, append_attributes
+from django_component_kit.utils import render_partial_from_template
 
 INNER_SLOT_NAME = "children"
 
 
+@dataclasses.dataclass
 class ComponentNode(Node):
-    name: str
-    unresolved_attributes: dict
-    slots: dict
+    """Represents a component node in the template."""
 
-    def __init__(self, component_name: str, attrs: dict, slots: dict, func: callable, template: Template):
-        """Represents a component node in the template."""
-        self.name = component_name
-        self.unresolved_attributes = attrs
-        self.slots = slots
-        self.func = func
-        self.template = template
+    name: str
+    attrs: dict
+    slots: dict
+    func: callable
+    template: Template
+    partial: str | None = None
 
     def _resolve_slots(self, context: Context) -> dict:
         """
@@ -59,7 +60,7 @@ class ComponentNode(Node):
         """Renders the component node."""
 
         slots = self._resolve_slots(context)
-        attributes = AttributeBag({key: value.resolve(context) for key, value in self.unresolved_attributes.items()})
+        attributes = AttributeBag({key: value.resolve(context) for key, value in self.attrs.items()})
         extra_context = {"attributes": attributes, "slots": slots}
 
         with context.push(extra_context):
@@ -76,21 +77,20 @@ class ComponentNode(Node):
                     raise TemplateSyntaxError(f"{self.name} component is missing required argument: {key}")
 
             with context.update(self.func(**kwargs)):
+                if self.partial:
+                    return render_partial_from_template(self.template.template, context, self.partial)
                 return self.template.render(context.flatten())
 
 
+@dataclasses.dataclass
 class SlotNode(Node):
-    def __init__(
-        self, name: str = None, nodelist: NodeList = None, unresolved_attributes: dict = None, special: dict = None
-    ):
-        """Represents a slot node in the template."""
-        self.name = name or ""
-        self.nodelist = nodelist or NodeList()
-        self.unresolved_attributes = unresolved_attributes or {}
-        self.special = special or {}
+    """Represents a slot node in the template."""
 
-        # Will be set by the ComponentNode
-        self.attributes = AttributeBag()
+    name: str = ""
+    nodelist: NodeList = dataclasses.field(default_factory=lambda: NodeList())
+    unresolved_attributes: dict = dataclasses.field(default_factory=lambda: {})
+    special: dict = dataclasses.field(default_factory=lambda: {})
+    attributes: AttributeBag = dataclasses.field(default_factory=lambda: AttributeBag())
 
     def resolve_attributes(self, context: Context):
         """Resolves the attributes of the slot."""
@@ -116,11 +116,12 @@ class SlotNodeList(NodeList):
         return AttributeBag()
 
 
+@dataclasses.dataclass
 class RenderSlotNode(Node):
-    def __init__(self, slot: FilterExpression, argument: FilterExpression | None = None):
-        """Represents a render slot node in the template."""
-        self.slot = slot
-        self.argument = argument
+    """Represents a render slot node in the template."""
+
+    slot: FilterExpression
+    argument: FilterExpression | None = None
 
     def render(self, context: Context) -> str:
         """Renders the render slot node."""
@@ -153,12 +154,13 @@ class RenderSlotNode(Node):
         return slot.render(context)
 
 
+@dataclasses.dataclass
 class MergeAttrsNode(Node):
-    def __init__(self, attributes: FilterExpression, default_attrs: list, append_attrs: list):
-        """Represents a merge attrs node in the template."""
-        self.attributes = attributes
-        self.default_attrs = default_attrs
-        self.append_attrs = append_attrs
+    """Represents a merge attrs node in the template."""
+
+    attributes: FilterExpression
+    default_attrs: list
+    append_attrs: list
 
     def render(self, context: Context) -> str:
         """Renders the merge attrs node."""
@@ -170,3 +172,19 @@ class MergeAttrsNode(Node):
         attrs = merge_attributes(default_attrs, bound_attributes)
         attrs = append_attributes(attrs, append_attrs)
         return attributes_to_string(attrs)
+
+
+@dataclasses.dataclass
+class PartialNode(Node):
+    """Represents a partial node in the template."""
+
+    partial_name: str
+    inline: bool
+    nodelist: NodeList
+
+    def render(self, context: Context, force=False):
+        """Set content into context and return empty string"""
+        if force or self.inline:
+            return self.nodelist.render(context)
+        else:
+            return ""

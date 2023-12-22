@@ -28,7 +28,7 @@ class DoComponentTest(TestCase):
 
         self.assertTrue(isinstance(node, ComponentNode))
         self.assertEqual(node.name, "hello")
-        self.assertEqual(node.unresolved_attributes, {})
+        self.assertEqual(node.attrs, {})
         self.assertEqual(node.slots, {INNER_SLOT_NAME: NodeList()})
 
     def test_interprets_attributes_with_no_value_as_true(self):
@@ -44,7 +44,7 @@ class DoComponentTest(TestCase):
         context = Context()
 
         self.assertEqual(
-            {key: value.resolve(context) for key, value in node.unresolved_attributes.items()},
+            {key: value.resolve(context) for key, value in node.attrs.items()},
             {
                 "required": True,
             },
@@ -80,7 +80,7 @@ class DoComponentTest(TestCase):
         node = template.nodelist[0]
         context = Context()
         self.assertEqual(
-            {key: value.resolve(context) for key, value in node.unresolved_attributes.items()},
+            {key: value.resolve(context) for key, value in node.attrs.items()},
             {
                 "class": "foo",
             },

@@ -5,7 +5,7 @@ from django.template import TemplateSyntaxError
 from django.template.base import Parser, Token
 
 from django_component_kit.attributes import split_attributes
-from django_component_kit.nodes import MergeAttrsNode, RenderSlotNode, SlotNode
+from django_component_kit.nodes import MergeAttrsNode, RenderSlotNode, SlotNode, PartialNode
 from django_component_kit.utils import attribute_re, token_kwargs
 
 
@@ -49,7 +49,7 @@ def do_render_slot(parser: Parser, token: Token) -> RenderSlotNode:
     """
     Renders the content of a slot.
 
-    Usage: {% render_slot slot [argument] %}
+    Usage: {% render_slot "NAME" [argument] %}
     """
     tag_name, *remaining_bits = token.split_contents()
     if not remaining_bits:
@@ -73,7 +73,7 @@ def do_slot(parser: Parser, token: Token) -> SlotNode:
     """
     Defines a slot with the given name and attributes.
 
-    Usage: {% slot "slot_name" [attr1=value1 attr2=value2] ... %} ... {% endslot %}
+    Usage: {% slot "NAME" [attr1=value1 attr2=value2] ... %} ... {% endslot %}
     """
     tag_name, *remaining_bits = token.split_contents()
 
@@ -91,3 +91,28 @@ def do_slot(parser: Parser, token: Token) -> SlotNode:
     parser.delete_first_token()
 
     return SlotNode(name=slot_name, nodelist=nodelist, unresolved_attributes=attrs, special=special)
+
+
+def do_partial(parser: Parser, token: Token) -> PartialNode:
+    """
+    Define a part as partial. The content will only be rendered if the optional "inline" argument is passed.
+    Can be used to only render a part of a template.
+
+    Usage: {% partial "NAME" [inline] %} Content {% endpartial %}
+    """
+    tokens = token.split_contents()
+
+    # check we have the expected number of tokens before trying to assign them via indexes
+    if len(tokens) not in (2, 3):
+        raise TemplateSyntaxError(f"{token.contents.split()[0]} tag requires 2-3 arguments")
+    partial_name = tokens[1].strip('"')
+    try:
+        inline = tokens[2].strip('"')
+        if inline != "inline":
+            raise TemplateSyntaxError(f"Invalid argument {inline}. argument must be 'inline'")
+    except IndexError:
+        inline = False
+
+    nodelist = parser.parse(("endpartial",))
+    parser.delete_first_token()
+    return PartialNode(partial_name, inline, nodelist)

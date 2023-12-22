@@ -595,6 +595,95 @@ the `:let` attribute to bind the value passed to `render_slot` to a variable wit
 
 You can nest components to create more complex elements. This allows you to build reusable and modular components.
 
+# Partials
+*Since: 0.2.0*
+
+Partials allow you to render only a part of a template. This can be useful, when you have a complex component which
+consists of multiple subcomponents. Like a card with actions, which are used to manipulate the content of the card.
+Usually you would use one template for the card and then one for each kind of action component. This is fine,
+until you have javascript, HTMX or AlpineJS logic inside of these components, which must reference each other.
+That's indeed possible, but the DX is bad, as you don't know what functions or attributes you can use and what they do.
+In this case partials are coming in for the rescue. Just put all subcomponents into a partial inside the main
+component. With this, even IDE support is present for seeing where which function is being called.
+
+## Usage
+You can directly write the partial inside the main component at any point in the template. Only if the `inline` argument
+is set to `True`, the partial will be rendered inside the main component. If not, it will be hidden. The example uses
+AlpineJS for demonstration purposes:
+
+```html
+<!-- templates/mycomponents/card.html -->
+<div class="card" x-data="{ color: text-success }">
+  <div class="card-header">
+    {% render_slot slots.header %}
+    {% partial "toggle_color_action" %}
+      <button
+              type="button"
+              class="btn-close"
+              aria-label="Toggle"
+              @click="color=color==='text-success' ? 'text-danger' : 'text-success'"
+      >
+        Toggle color
+      </button>
+    {% endpartial %}
+  </div>
+  <div class="card-body" :class="color">
+    {% render_slot slots.children %}
+  </div>
+</div>
+```
+
+```python
+# templatetags/mycomponents.py
+from django import template
+from django.template.loader import get_template
+from django_component_kit import component_block_tag, component_inline_tag
+
+register = template.Library()
+
+@register.tag
+@register.tag('endcard')
+@component_block_tag(get_template("mycomponents/card.html"))
+def card() -> dict:
+    return dict()
+
+
+@register.tag
+@component_inline_tag(get_template("mycomponents/card.html"), partial="toggle_color_action")
+def toggle_color_action() -> dict:
+    return dict()
+```
+
+```html
+<!-- templates/index.html -->
+{% card %}
+  {% slot header %}
+    {% toggle_color_action %}
+  {% endslot %}
+  <p>This is a text</p>
+{% endcard %}
+```
+
+### Result
+```html
+<div class="card" x-data="{ color: text-success }">
+  <div class="card-header">
+    <button
+            type="button"
+            class="btn-close"
+            aria-label="Toggle"
+            @click="color=color==='text-success' ? 'text-danger' : 'text-success'"
+    >
+      Toggle color
+    </button>
+  </div>
+  <div class="card-body" :class="color">
+    <p>This is a text</p>
+  </div>
+</div>
+```
+
+
 # Contribution
 
 If you have any questions, suggestions, or feedback, feel free
