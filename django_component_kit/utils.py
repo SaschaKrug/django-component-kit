@@ -1,7 +1,9 @@
+"""
+Utility functions for Django Component Kit.
+"""
 import re
 
-from django.template import Context
-from django.template.base import Parser, Template
+from django.template.base import Parser
 from django.utils.regex_helper import _lazy_re_compile
 
 attribute_re = _lazy_re_compile(
@@ -65,26 +67,3 @@ def token_kwargs(bits: list[str], parser: Parser) -> dict:
 
         kwargs[key] = parser.compile_filter(value)
     return kwargs
-
-
-def render_partial_from_template(template: Template, context: Context, partial_name: str) -> str:
-    """Render a partial from a template."""
-
-    def _get_partial_from_nodelist(nodelist: list) -> str:
-        """Recursively get a partial from a list of nodes."""
-        from django_component_kit.nodes import PartialNode
-
-        for node in nodelist:
-            if isinstance(node, PartialNode) and node.partial_name == partial_name:
-                return node.render(context, force=True)
-            for sub_nodelist in node.child_nodelists:
-                try:
-                    return _get_partial_from_nodelist(getattr(node, sub_nodelist))
-                except AttributeError:
-                    continue
-        raise AttributeError(f"Could not find partial with name '{partial_name}'")
-
-    try:
-        return _get_partial_from_nodelist(template.nodelist)
-    except AttributeError:
-        return ""

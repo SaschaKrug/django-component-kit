@@ -1,9 +1,13 @@
 # Changelog
 
+## [0.2.1] - 2023-12-22
+- Cache 'render_partial_from_template' utility function
+- Update dev dependencies
+
 ## [0.2.0] - 2023-12-22
 
 - Add `{% partial NAME %}` tag to define a partial inside a template
-- Add `render_partial` utility function to render a partial
+- Add `render_partial_from_template` utility function to render a partial
 - Add `partial=XXX` argument to components to render only a partial
 - Improve docs
 

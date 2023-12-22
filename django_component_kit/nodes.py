@@ -11,7 +11,7 @@ from django.template.base import FilterExpression, Node, NodeList
 from django.utils.safestring import SafeString
 
 from django_component_kit.attributes import AttributeBag, attributes_to_string, merge_attributes, append_attributes
-from django_component_kit.utils import render_partial_from_template
+from django_component_kit.partials import render_partial_from_template
 
 INNER_SLOT_NAME = "children"
 
@@ -172,19 +172,3 @@ class MergeAttrsNode(Node):
         attrs = merge_attributes(default_attrs, bound_attributes)
         attrs = append_attributes(attrs, append_attrs)
         return attributes_to_string(attrs)
-
-
-@dataclasses.dataclass
-class PartialNode(Node):
-    """Represents a partial node in the template."""
-
-    partial_name: str
-    inline: bool
-    nodelist: NodeList
-
-    def render(self, context: Context, force=False):
-        """Set content into context and return empty string"""
-        if force or self.inline:
-            return self.nodelist.render(context)
-        else:
-            return ""

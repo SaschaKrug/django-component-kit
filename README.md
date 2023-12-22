@@ -606,6 +606,8 @@ That's indeed possible, but the DX is bad, as you don't know what functions or a
 In this case partials are coming in for the rescue. Just put all subcomponents into a partial inside the main
 component. With this, even IDE support is present for seeing where which function is being called.
 
+Hint: The partials are cached, so you can use a lot of them without performance impact.
+
 ## Usage
 You can directly write the partial inside the main component at any point in the template. Only if the `inline` argument
 is set to `True`, the partial will be rendered inside the main component. If not, it will be hidden. The example uses

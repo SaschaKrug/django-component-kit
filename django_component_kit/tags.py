@@ -5,7 +5,8 @@ from django.template import TemplateSyntaxError
 from django.template.base import Parser, Token
 
 from django_component_kit.attributes import split_attributes
-from django_component_kit.nodes import MergeAttrsNode, RenderSlotNode, SlotNode, PartialNode
+from django_component_kit.nodes import MergeAttrsNode, RenderSlotNode, SlotNode
+from django_component_kit.partials import PartialNode
 from django_component_kit.utils import attribute_re, token_kwargs
 
 
