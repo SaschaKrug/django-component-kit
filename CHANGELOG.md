@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.3.0] - 2024-01-09
+- Add 'is_partial' attribute when rendering partials
+
 ## [0.2.1] - 2023-12-22
 - Cache 'render_partial_from_template' utility function
 - Update dev dependencies

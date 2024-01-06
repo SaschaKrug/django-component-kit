@@ -608,6 +608,9 @@ component. With this, even IDE support is present for seeing where which functio
 
 Hint: The partials are cached, so you can use a lot of them without performance impact.
 
+*Since: 0.3.0*
+When a template is rendered as a partial, the 'is_partial' attribute is set.
+
 ## Usage
 You can directly write the partial inside the main component at any point in the template. Only if the `inline` argument
 is set to `True`, the partial will be rendered inside the main component. If not, it will be hidden. The example uses

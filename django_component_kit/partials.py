@@ -14,6 +14,7 @@ class PartialNode(Node):
 
     def render(self, context: Context, force=False):
         """Set content into context and return empty string"""
+        context["is_partial"] = force
         if force or self.inline:
             return self.nodelist.render(context)
         else:
