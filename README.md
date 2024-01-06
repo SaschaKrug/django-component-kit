@@ -610,6 +610,7 @@ Hint: The partials are cached, so you can use a lot of them without performance 
 
 *Since: 0.3.0*
 When a template is rendered as a partial, the 'is_partial' attribute is set.
+Partials can be rendered directly via the `PartialResponse` class.
 
 ## Usage
 You can directly write the partial inside the main component at any point in the template. Only if the `inline` argument

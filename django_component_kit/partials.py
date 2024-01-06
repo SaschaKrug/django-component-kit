@@ -1,6 +1,8 @@
 import dataclasses
 
+from django.http import HttpResponse, HttpRequest
 from django.template import Context
+from django.template.backends.utils import csrf_input_lazy, csrf_token_lazy
 from django.template.base import Template, Node, NodeList
 
 
@@ -65,3 +67,12 @@ def render_partial_from_template(template: Template, context: Context, partial_n
         return partial_cache.get(template, partial_name).render(context, force=True)
     except KeyError:
         return _get_partial_from_nodelist(template.nodelist)
+
+
+class PartialResponse(HttpResponse):
+    """Render a partial from a django template as a response."""
+
+    def __init__(self, request: HttpRequest, django_template: Template, context: dict, name: str):
+        context["csrf_input"] = csrf_input_lazy(request)
+        context["csrf_token"] = csrf_token_lazy(request)
+        super().__init__(render_partial_from_template(django_template.template, context, name))
