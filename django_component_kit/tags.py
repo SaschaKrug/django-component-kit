@@ -81,7 +81,7 @@ def do_slot(parser: Parser, token: Token) -> SlotNode:
     if len(remaining_bits) < 1:
         raise TemplateSyntaxError("'%s' tag takes at least one argument, the slot name" % tag_name)
 
-    slot_name = remaining_bits.pop(0).strip('"')
+    slot_name = remaining_bits.pop(0).strip('"').strip("'")
 
     # Bits that are not keyword args are interpreted as `True` values
     all_bits = [bit if "=" in bit else f"{bit}=True" for bit in remaining_bits]
@@ -106,9 +106,9 @@ def do_partial(parser: Parser, token: Token) -> PartialNode:
     # check we have the expected number of tokens before trying to assign them via indexes
     if len(tokens) not in (2, 3):
         raise TemplateSyntaxError(f"{token.contents.split()[0]} tag requires 2-3 arguments")
-    partial_name = tokens[1].strip('"')
+    partial_name = tokens[1].strip('"').strip("'")
     try:
-        inline = tokens[2].strip('"')
+        inline = tokens[2].strip('"').strip("'")
         if inline != "inline":
             raise TemplateSyntaxError(f"Invalid argument {inline}. Possible options: [inline]")
     except IndexError:
