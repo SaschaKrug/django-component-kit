@@ -86,12 +86,12 @@ def do_slot(parser: Parser, token: Token) -> SlotNode:
     # Bits that are not keyword args are interpreted as `True` values
     all_bits = [bit if "=" in bit else f"{bit}=True" for bit in remaining_bits]
     raw_attributes = token_kwargs(all_bits, parser)
-    special, attrs = split_attributes(raw_attributes)
+    special, unresolved_attributes = split_attributes(raw_attributes)
 
     nodelist = parser.parse(("endslot",))
     parser.delete_first_token()
 
-    return SlotNode(name=slot_name, nodelist=nodelist, unresolved_attributes=attrs, special=special)
+    return SlotNode(name=slot_name, nodelist=nodelist, unresolved_attributes=unresolved_attributes, special=special)
 
 
 def do_partial(parser: Parser, token: Token) -> PartialNode:
