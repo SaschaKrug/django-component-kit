@@ -4,6 +4,7 @@
 - Add 'is_partial' attribute when rendering partials
 - Add support for strings with ' enclosures
 - Add PartialResponse class to render partials in views
+- Add support for dict as input for `render_partial_from_template`
 
 ## [0.2.1] - 2023-12-22
 - Cache 'render_partial_from_template' utility function

@@ -47,8 +47,11 @@ class PartialCache:
 partial_cache = PartialCache()
 
 
-def render_partial_from_template(template: Template, context: Context, partial_name: str) -> str:
+def render_partial_from_template(template: Template, context: Context | dict, partial_name: str) -> str:
     """Render a partial from a template."""
+
+    if isinstance(context, dict):
+        context = Context(context)
 
     def _get_partial_from_nodelist(nodelist: list) -> str:
         """Recursively get a partial from a list of nodes."""
