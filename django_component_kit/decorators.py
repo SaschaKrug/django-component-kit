@@ -4,6 +4,7 @@ Decorators for Django Component Kit.
 from django.template import NodeList, TemplateSyntaxError
 from django.template.base import Parser, Token, Template
 
+from django_component_kit.assets import assets
 from django_component_kit.attributes import split_attributes
 from django_component_kit.nodes import ComponentNode, SlotNodeList, SlotNode, INNER_SLOT_NAME
 from django_component_kit.utils import token_kwargs
@@ -49,8 +50,11 @@ def _parse_bits(bits: list, parser: Parser, nodelist: NodeList) -> tuple:
     return slots, attrs
 
 
-def component_inline_tag(template: Template, partial: str = None) -> callable:
+def component_inline_tag(template: Template, partial: str = None, js: list = None, css: list = None) -> callable:
     """Decorator for creating an inline component tag."""
+
+    assets.add_js(js)
+    assets.add_css(css)
 
     def dec(func):
         def do_component(parser: Parser, token: Token) -> ComponentNode:
@@ -66,8 +70,11 @@ def component_inline_tag(template: Template, partial: str = None) -> callable:
     return dec
 
 
-def component_block_tag(template: Template, partial: str = None) -> callable:
+def component_block_tag(template: Template, partial: str = None, js: list = None, css: list = None) -> callable:
     """Decorator for creating a block component tag."""
+
+    assets.add_js(js)
+    assets.add_css(css)
 
     def dec(func):
         def do_component(parser: Parser, token: Token) -> ComponentNode:

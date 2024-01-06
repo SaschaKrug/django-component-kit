@@ -10,6 +10,7 @@ from django.template.backends.django import Template
 from django.template.base import FilterExpression, Node, NodeList
 from django.utils.safestring import SafeString
 
+from django_component_kit.assets import assets
 from django_component_kit.attributes import AttributeBag, attributes_to_string, merge_attributes, append_attributes
 from django_component_kit.partials import render_partial_from_template
 
@@ -172,3 +173,11 @@ class MergeAttrsNode(Node):
         attrs = merge_attributes(default_attrs, bound_attributes)
         attrs = append_attributes(attrs, append_attrs)
         return attributes_to_string(attrs)
+
+
+class AssetsNode(Node):
+    """Represents an asset node in the template."""
+
+    def render(self, _):
+        """Renders all assets."""
+        return "\n".join(assets.js.union(assets.css))

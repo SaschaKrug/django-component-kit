@@ -1,6 +1,7 @@
 # Changelog
 
 ## [0.3.0] - 2024-01-09
+- Add assets support
 - Add 'is_partial' attribute when rendering partials
 - Add support for strings with ' enclosures
 - Add PartialResponse class to render partials in views

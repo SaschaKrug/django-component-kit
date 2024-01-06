@@ -689,6 +689,39 @@ def toggle_color_action() -> dict:
 </div>
 ```
 
+# Assets
+*Since: 0.3.0*
+
+When registering a component, you can assign JS oder CSS assets to it. You can do this using the `js` or `css` arguments
+in the `component_inline_tag` or `component_block_tag`. They will be ordered in the order they are registered,
+CSS in front of JS. Duplicates are removed. You can then use the assets via the `assets` tag.
+
+*Hint:* If you want to modify the assets, you can import the `assets` object and modify it before usage.
+
+## Usage
+```python
+# templatetags/mycomponents.py
+from django import template
+from django.template.loader import get_template
+from django_component_kit import component_inline_tag
+
+register = template.Library()
+
+@register.tag
+@component_inline_tag(get_template("mycomponents/card.html"), js=["myjs.js"])
+def card() -> dict:
+    return dict()
+```
+
+```html
+<!-- templates/index.html -->
+{% assets %}
+```
+
+### Result
+```html
+<script src="myjs.js" defer></script>
+```
 
 # Contribution
 

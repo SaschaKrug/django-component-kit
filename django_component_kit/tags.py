@@ -5,7 +5,7 @@ from django.template import TemplateSyntaxError
 from django.template.base import Parser, Token
 
 from django_component_kit.attributes import split_attributes
-from django_component_kit.nodes import MergeAttrsNode, RenderSlotNode, SlotNode
+from django_component_kit.nodes import MergeAttrsNode, RenderSlotNode, SlotNode, AssetsNode
 from django_component_kit.partials import PartialNode
 from django_component_kit.utils import attribute_re, token_kwargs
 
@@ -117,3 +117,8 @@ def do_partial(parser: Parser, token: Token) -> PartialNode:
     nodelist = parser.parse(("endpartial",))
     parser.delete_first_token()
     return PartialNode(partial_name, inline, nodelist)
+
+
+def do_assets(*_) -> AssetsNode:
+    """Add JS and CSS assets."""
+    return AssetsNode()
