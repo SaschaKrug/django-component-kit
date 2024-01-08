@@ -1,6 +1,9 @@
 # Changelog
 
-## [0.3.0] - 2024-01-09
+## [0.3.1] - 2024-01-09
+- Cache rendered assets
+
+## [0.3.0] - 2024-01-08
 - Add assets support
 - Add 'is_partial' attribute when rendering partials
 - Add support for strings with ' enclosures

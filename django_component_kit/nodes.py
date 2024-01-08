@@ -180,4 +180,4 @@ class AssetsNode(Node):
 
     def render(self, _):
         """Renders all assets."""
-        return "\n".join(assets.js.union(assets.css))
+        return assets.as_string()

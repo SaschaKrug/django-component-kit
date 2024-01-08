@@ -10,6 +10,7 @@ class AssetRegistry:
     def __init__(self):
         self.js = set()
         self.css = set()
+        self._string = ""
 
     def add_js(self, js_list: Iterable[str] | None):
         """Add JS files"""
@@ -20,6 +21,12 @@ class AssetRegistry:
         """Add CSS files"""
         css_list = css_list or []
         self.css.update([f'<link crossorigin="anonymous" href="{css}" rel="stylesheet">' for css in css_list])
+
+    def as_string(self, refresh: bool = False) -> str:
+        """Return cached assets as string"""
+        if not self._string or refresh:
+            self._string = "\n".join(self.js) + "\n" + "\n".join(self.css)
+        return self._string
 
 
 assets = AssetRegistry()
