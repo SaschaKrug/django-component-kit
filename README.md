@@ -708,7 +708,7 @@ from django_component_kit import component_inline_tag
 register = template.Library()
 
 @register.tag
-@component_inline_tag(get_template("mycomponents/card.html"), js=["myjs.js"])
+@component_inline_tag(get_template("mycomponents/card.html"), js=["myapp/myjs.js"])
 def card() -> dict:
     return dict()
 ```
@@ -720,7 +720,7 @@ def card() -> dict:
 
 ### Result
 ```html
-<script src="myjs.js" defer></script>
+<script src="static/myapp/myjs.js" defer></script>
 ```
 
 # Contribution

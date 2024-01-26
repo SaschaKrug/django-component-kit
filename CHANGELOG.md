@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.0] - 2024-01-26
+fix: compatibility with Whitenoise compression
+
+BREAKING-CHANGE:
+Assets now require the relative path you would normally use inside a static template tag
+
 ## [0.3.1] - 2024-01-09
 - Cache rendered assets
 
