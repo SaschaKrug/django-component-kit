@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.4.1] - 2024-01-26
+fix: startup with whitenoise can cause issues
+
 ## [0.4.0] - 2024-01-26
 fix: compatibility with Whitenoise compression
 

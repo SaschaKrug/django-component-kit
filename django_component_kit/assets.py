@@ -15,18 +15,18 @@ class AssetRegistry:
 
     def add_js(self, js_list: Iterable[str] | None):
         """Add JS files"""
-        js_list = js_list or []
-        self.js.update([f'<script src="{static(js)}" defer></script>' for js in js_list])
+        self.js.update(js_list or [])
 
     def add_css(self, css_list: Iterable[str] | None):
         """Add CSS files"""
-        css_list = css_list or []
-        self.css.update([f'<link crossorigin="anonymous" href="{static(css)}" rel="stylesheet">' for css in css_list])
+        self.css.update(css_list or [])
 
     def as_string(self, refresh: bool = False) -> str:
         """Return cached assets as string"""
         if not self._string or refresh:
-            self._string = "\n".join(self.js) + "\n" + "\n".join(self.css)
+            js_list = [f'<script src="{static(js)}" defer></script>' for js in self.js]
+            css_list = [f'<link crossorigin="anonymous" href="{static(css)}" rel="stylesheet">' for css in self.css]
+            self._string = "\n".join(js_list) + "\n" + "\n".join(css_list)
         return self._string
 
 
