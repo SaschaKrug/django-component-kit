@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.5.0] - 2024-02-12
+feat: optionally a context parameter can be added to a tag. This will contain the full context
+
 ## [0.4.1] - 2024-01-26
 fix: startup with whitenoise can cause issues
 

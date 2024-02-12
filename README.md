@@ -198,7 +198,7 @@ the function and the parameters bundled into the `attributes` variable.
 </div>
 ```
 
-## 3. Use the component in a template
+### 3. Use the component in a template
 
 Use the component in your template by calling the registered tag and passing the required parameters.
 
@@ -210,7 +210,7 @@ Use the component in your template by calling the registered tag and passing the
 </form>
 ```
 
-## Result
+### Result
 
 The component will be rendered with the provided attributes:
 
@@ -226,7 +226,7 @@ The component will be rendered with the provided attributes:
 </form>
 ```
 
-## Details
+### Details
 
 - The `@component_inline_tag()` decorator should be placed between the `@register.tag` decorator and the function
   definition.
@@ -237,6 +237,9 @@ The component will be rendered with the provided attributes:
 - The `register.tag()` function provides IDE support for jumping from template tags to functions and viewing component
   usage.
 - Providing a parameter without a key will treat it as a boolean value. See `attributes` for more details.
+
+*Since: 0.5.0*
+- Optionally a context parameter can be added to a tag. This will contain the full context
 
 ## Block Components
 
@@ -292,7 +295,7 @@ are defined using the `slot` tag.
 </div>
 ```
 
-## 3. Use the component in a template
+### 3. Use the component in a template
 
 Use the component in your template by calling the registered tag and defining the slots using the `slot` tag.
 
@@ -313,7 +316,7 @@ Use the component in your template by calling the registered tag and defining th
 </div>
 ```
 
-## Result
+### Result
 
 The component will be rendered with the provided attributes and slots:
 
@@ -336,7 +339,7 @@ The component will be rendered with the provided attributes and slots:
 </div>
 ```
 
-## Details
+### Details
 
 - All details of inline components apply to block components as well.
 - The tag must end with an `endXXX` tag, where `XXX` is the name of the component. Everything enclosed within the tags
@@ -349,6 +352,9 @@ The component will be rendered with the provided attributes and slots:
 - Use the `{% slot %}` tag to define a slot. It must end with an `{% endslot %}` tag. Everything enclosed within the
   tags will be added to the slot.
 - Use `merge_attrs` to merge attributes together.
+
+*Since: 0.5.0*
+- Optionally a context parameter can be added to a tag. This will contain the full context
 
 # Passing Data to Components
 

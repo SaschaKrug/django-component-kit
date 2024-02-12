@@ -68,6 +68,7 @@ class ComponentNode(Node):
             kwargs = {}
             for key, parameter in inspect.signature(self.func).parameters.items():
                 if key == "context":
+                    kwargs["context"] = context.flatten()
                     continue
                 try:
                     if parameter.default == parameter.empty:
