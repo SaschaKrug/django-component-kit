@@ -47,6 +47,8 @@ def card(title: str) -> dict:
 ## Usage
 ```html
 <!-- templates/myapp/index.html -->
+{% load django_component_kit %}
+
 <div>
   {% card title="Card title" %}
     <p class="card-text">Foo</p>
@@ -301,6 +303,8 @@ Use the component in your template by calling the registered tag and defining th
 
 ```html
 <!-- templates/myapp/index.html -->
+{% load django_component_kit %}
+
 <div>
     {% card class='mb-3' %}
     {% slot header %}
@@ -397,7 +401,6 @@ You can also render all attributes directly using `{{ attributes }}`. For exampl
 You can render all attributes using:
 
 ```html
-
 <div {{ attributes }}>
     <!-- Component content -->
 </div>
@@ -406,7 +409,6 @@ You can render all attributes using:
 This will render the following HTML:
 
 ```html
-
 <div id="alerts" class="font-bold">
     <!-- Component content -->
 </div>
@@ -440,7 +442,6 @@ You can specify default values for attributes or merge additional values into so
 the `merge_attrs` tag:
 
 ```html
-
 <div {% merge_attrs attributes class="alert" role="alert" %}>
     <!-- Component content -->
 </div>
@@ -455,7 +456,6 @@ If we assume this component is used like this:
 The final rendered HTML of the component will be:
 
 ```html
-
 <div class="alert mb-4" role="alert">
     <!-- Component content -->
 </div>
@@ -468,7 +468,6 @@ the "default" values of the attribute. These attributes will not be merged with 
 overwritten. For example, a `button` component's implementation may look like this:
 
 ```html
-
 <button {% merge_attrs attributes type="button" %}>
     {% render_slot slots.inner_block %}
 </button>
@@ -484,7 +483,6 @@ specified, the default `button` type will be used:
 The rendered HTML of the `button` component in this example would be:
 
 ```html
-
 <button type="submit">
     Submit
 </button>
@@ -495,7 +493,6 @@ The rendered HTML of the `button` component in this example would be:
 You can treat other attributes as "appendable" by using the `+=` operator:
 
 ```html
-
 <div {% merge_attrs attributes data-value+="some-value" %}>
     <!-- Component content -->
 </div>
@@ -510,7 +507,6 @@ If we assume this component is used like this:
 The rendered HTML will be:
 
 ```html
-
 <div data-value="foo some-value">
     <!-- Component content -->
 </div>
@@ -535,22 +531,20 @@ register = template.Library()
 
 
 @register.tag
-@register.tag('endalert')
+@register.tag("endalert")
 @component_block_tag(get_template("mycomponents/alert.html"))
-def alert(attributes: dict) -> dict:
+def alert(dismissible: bool) -> dict:
     """Component for rendering an alert."""
-    dismissible = attributes.pop("dismissible", False)
-    return {
-        "dismissible": dismissible,
-        "attributes": attributes
-    }
+    return {"dismissible": dismissible}
 ```
 
 The component's template can then be modified to handle the new structure:
 
 ```html
 <!-- templates/mycomponents/alert.html -->
-<div {{ attributes }}>
+{% load django_component_kit %}
+
+<div {% merge_attrs attributes %}>
     {% render_slot slots.children %}
     {% if dismissible %}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -569,7 +563,6 @@ This is an alert.
 The rendered HTML will be:
 
 ```html
-
 <div id="my-alert" class="my-class">
     This is an alert.
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -625,6 +618,8 @@ AlpineJS for demonstration purposes:
 
 ```html
 <!-- templates/mycomponents/card.html -->
+{% load django_component_kit %}
+
 <div class="card" x-data="{ color: text-success }">
   <div class="card-header">
     {% render_slot slots.header %}
@@ -668,6 +663,8 @@ def toggle_color_action() -> dict:
 
 ```html
 <!-- templates/index.html -->
+{% load django_component_kit %}
+
 {% card %}
   {% slot header %}
     {% toggle_color_action %}
