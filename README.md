@@ -531,15 +531,11 @@ register = template.Library()
 
 
 @register.tag
-@register.tag('endalert')
+@register.tag("endalert")
 @component_block_tag(get_template("mycomponents/alert.html"))
-def alert(attributes: dict) -> dict:
+def alert(dismissible: bool) -> dict:
     """Component for rendering an alert."""
-    dismissible = attributes.pop("dismissible", False)
-    return {
-        "dismissible": dismissible,
-        "attributes": attributes
-    }
+    return {"dismissible": dismissible}
 ```
 
 The component's template can then be modified to handle the new structure:
@@ -548,7 +544,7 @@ The component's template can then be modified to handle the new structure:
 <!-- templates/mycomponents/alert.html -->
 {% load django_component_kit %}
 
-<div {{ attributes }}>
+<div {% merge_attrs attributes %}>
     {% render_slot slots.children %}
     {% if dismissible %}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
